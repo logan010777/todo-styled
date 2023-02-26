@@ -1,0 +1,133 @@
+<html dir="rtl">
+    <head>
+        <title>
+            تو دو لیست
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="output.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+        <link rel="stylesheet" href="https://babakhani.github.io/PersianWebToolkit/beta/lib/persian-datepicker/dist/css/persian-datepicker.css"/>
+      <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+      <script src="https://babakhani.github.io/PersianWebToolkit/beta/lib/persian-date/dist/persian-date.js"></script>
+      <script src="https://babakhani.github.io/PersianWebToolkit/beta/lib/persian-datepicker/dist/js/persian-datepicker.js"></script>
+    </head>
+    <body class="bg-slate-800 font-['Vazirmatn'] text-white flex justify-center">
+            
+        <div id="container" class=" mx-5 flex flex-col justify-center aling-middle ">
+            <h1 class="text-center mb-5 text-2xl font-extrabold bg-clip-text bg-gradient-to-l from-slate-900 to-pink-400 text-transparent">تودو لیست تو</h1>
+                <div class="">
+                    <div class="flex flex-col ">
+                        <input id="input" type="text" class="bg-slate-600 mx-8 rounded-sm border-0 py-px px-4 mb-2 placeholder:text-center " placeholder="چه کاری میخوای انجام بدی؟">
+                        <input id="datePicker" type="text" class="auto-close-example mx-8 text-slate-900 px-4 mb-2 placeholder:text-center placeholder="چه وقتی میخای انجام بدی؟">
+                        <button id="addTodoButton" class="bg-green-600 rounded-sm   hover:bg-green-800 font-light max-w-fit relative pl-8 pr-3 mx-auto">
+                        افزودن
+                        <span class="material-symbols-outlined absolute top-[3px] left-2 " style="font-size:18px">
+                            add_task
+                            </span>
+                        </button>
+                    </div>
+                    <div id="todoList" class="text-sm bg-slate-500 mt-4 p-4 max-w-full rounded-md">
+    
+                    </div>
+                </div>
+                        
+                        <p class="text-center text-xs  font-thin relative mt-2 "><span class="material-symbols-outlined" style="font-size: 15px;">sentiment_satisfied</span>Written by Babak Bayat</p>
+                    
+            </div>
+        <script>
+            //Model
+                let todos;
+                const savedTodos = JSON.parse(localStorage.getItem("todo"));
+                if(Array.isArray(savedTodos)){
+                    todos = savedTodos;
+                }
+                else{
+                    todos = [{title:"washing dishes", dueDate:"2022/12/01", id:"id1"},
+                        {title:"meeting ai new projects", dueDate:"2030/09/07", id:"id2"},
+                        {title:"going to india", dueDate:"2024/01/15", id:"id3"}];
+                }
+                        render()
+
+                        const addTodoButton = document.getElementById("addTodoButton")
+                        
+                        addTodoButton.onclick=addTodo
+                        function saveTodos(){
+                            localStorage.setItem("todo",JSON.stringify(todos));
+                        }
+                        
+                //view 
+                function render(){
+                    document.getElementById("todoList").innerHTML=""
+                    todos.forEach(elem=>{
+                        const container =document.getElementById("todoList")
+                        const element= document.createElement("div");
+                        const deleteSpan = document.createElement("deleteSpan");
+                        const deleteButton = document.createElement("button");
+                        deleteButton.innerText = "حذف";
+                        deleteButton.style = "padding:0 1rem; border:none; --tw-text-opacity: 1;color: rgb(255 255 255 / var(--tw-text-opacity)); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;--tw-bg-opacity: 1;background-color: rgb(239 68 68 / var(--tw-bg-opacity));border-radius: 0.125rem;cursor: pointer;margin-left:.75rem;font-weight:600 ;vertical-align:middle;position:relative;padding-left:2rem;height:24px;margin-right:1rem;font-weight:300"
+                        deleteButton.setAttribute("onmouseover","this.style.backgroundColor=' rgb(220 38 38 )'");
+                        deleteButton.setAttribute("onmouseout","this.style.backgroundColor=' rgb(239 68 68)'");
+                        deleteSpan.classList.add("material-symbols-outlined");
+                        deleteSpan.style="vertical-align:center;font-size:18px; position:absolute; top:2px; left:0; right:40px;"
+                        deleteSpan.innerText="delete"
+                        deleteButton.id=elem.id;
+                        deleteButton.onclick = remove;
+                        deleteSpan.onclick = remove;
+                        deleteSpan.id=elem.id;
+                        element.style.marginBottom="0.5rem"
+                        element.innerText=elem.title +" "+ elem.dueDate;
+                        container.appendChild(element);
+                        element.appendChild(deleteButton);
+                        deleteButton.appendChild(deleteSpan)
+                    });
+                };
+                //control
+                function addTodo(){
+                        const input = document.getElementById("input");
+                        const datePicker = document.getElementById("datePicker");
+                        dueDate = datePicker.value;
+                        const inputValue =input.value;
+                        const id=new Date().getTime()+""
+                        todos.push({title:inputValue, dueDate:dueDate,id:id});
+                        render()
+                        saveTodos()
+                        };
+                        
+                function remove(event){
+                    const deleteButton = event.target;
+                    const idToDelete = deleteButton.id;
+                    todos = todos.filter(elem=>{
+                        if(elem.id === idToDelete){
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    })
+                    render();
+                    saveTodos()
+                };
+
+
+        </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.auto-close-example ').persianDatepicker({
+                
+    autoClose: true,
+    position:[100,40],
+    timePicker: {
+        enabled: true,
+        meridiem: {
+            enabled: true
+        }
+    }
+    
+});
+        });
+       
+      </script>
+
+    </body>
+</html>
+
